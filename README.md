@@ -25,4 +25,3 @@ myfunc();     // [{"one":true},null,null,{"two":true},null,{"three":true},123]
 myfunc(1);    // [{"one":true},1,null,{"two":true},null,{"three":true},123]
 myfunc(1, 2); // [{"one":true},1,2,{"two":true},null,{"three":true},123]
 ```
-
