@@ -1,5 +1,5 @@
 describe("DI", function () {
-    var di;
+    var di, args;
 
     beforeEach(function () {
         di = new DI();
@@ -72,11 +72,65 @@ describe("DI", function () {
         });
     });
 
-    // describe("argument list generator", function () {
-    //     it("", function () {
-    //     });
+    describe("argument list generator", function () {
+        it("non di args are not ignored", function () {
+            args = di.generate_argument_list(['one', 'two'], [1, 2]);
+            expect(args).toEqual([1, 2]);
+        });
 
-    // });
+        it("extra arguments are not ignored", function () {
+            args = di.generate_argument_list(['one', 'two'], [1, 2, 3, 4]);
+            expect(args).toEqual([1, 2]);
+        });
+
+        it("di arguments non registered are set as null", function () {
+            args = di.generate_argument_list(['$one', '$two'], [1, 2]);
+            expect(args).toEqual([null, null]);
+        });
+
+        it("di arguments are included", function () {
+            di.dependency('one', 1);
+            args = di.generate_argument_list(['$one'], []);
+            expect(args).toEqual([1]);
+        });
+
+        it("di arguments are not overwritten", function () {
+            di.dependency('one', 1);
+            args = di.generate_argument_list(['$one'], [2]);
+            expect(args).toEqual([1]);
+        });
+
+        it("di arguments can be mixed with regular arguments, manual first", function () {
+            di.dependency('one', 1);
+            args = di.generate_argument_list(['one', '$one'], [2]);
+            expect(args).toEqual([2, 1]);
+        });
+
+        it("di arguments can be mixed with regular arguments, manual second", function () {
+            di.dependency('one', 1);
+            args = di.generate_argument_list(['$one', 'one'], [2]);
+            expect(args).toEqual([1, 2]);
+        });
+
+        it("di arguments can be mixed with regular arguments, manual middle", function () {
+            di.dependency('one', 1);
+            di.dependency('two', 2);
+            args = di.generate_argument_list(['$one', 'three', '$two'], [3]);
+            expect(args).toEqual([1, 3, 2]);
+        });
+
+        it("multiple di arguments", function () {
+            di.dependency('one', 1);
+            di.dependency('two', 2);
+            args = di.generate_argument_list(['$one', '$two'], []);
+            expect(args).toEqual([1, 2]);
+        });
+
+        it("passing no arguments acts the same", function () {
+            args = di.generate_argument_list(['one', 'two'], []);
+            expect(args).toEqual([null, null]);
+        });
+    });
 
     // it("", function () {
     // });
