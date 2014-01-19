@@ -72,12 +72,13 @@ module.exports = function (grunt) {
                     templateOptions: {
                         coverage: 'build/tests/js/converage.json',
                         report: 'build/tests/js/report/',
-                        thresholds: {
-                            lines: 75,
-                            statements: 75,
-                            branches: 75,
-                            functions: 90
-                        },
+
+                        // thresholds: {
+                        //     lines: 75,
+                        //     statements: 75,
+                        //     branches: 75,
+                        //     functions: 90
+                        // },
 
                         template: require('grunt-template-jasmine-requirejs'),
 
