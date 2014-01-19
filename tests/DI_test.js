@@ -1,5 +1,5 @@
 describe("DI", function () {
-    var di, args;
+    var di, args, func, difunc;
 
     beforeEach(function () {
         di = new DI();
@@ -132,18 +132,53 @@ describe("DI", function () {
         });
     });
 
-    // it("", function () {
-    // });
+    describe("bound functions", function () {
+        it("valueOf returns the same", function () {
+            func = function (num) {
+               return num;
+            };
 
-    // it("", function () {
-    // });
+            difunc = di.bind(func);
+            expect(difunc.valueOf()).toBe(func.valueOf());
+        });
 
-    // it("", function () {
-    // });
+        it("toString returns the same", function () {
+            func = function (num) {
+               return num;
+            };
 
-    // it("", function () {
-    // });
+            difunc = di.bind(func);
+            expect(difunc.toString()).toBe(func.toString());
+            expect(difunc + '').toBe(func + '');
+        });
 
-    // it("", function () {
-    // });
+        it("return value is the same", function () {
+            func = function (num) {
+               return num;
+            };
+
+            difunc = di.bind(func);
+            expect(difunc(1)).toBe(func(1));
+        });
+
+        it("di arguments as passed", function () {
+            di.dependency('one', 1);
+            di.dependency('two', 2);
+            difunc = di.bind(function ($one, $two) {
+                return $one + $two;
+            });
+
+            expect(difunc()).toBe(3);
+        });
+
+        it("manual arguments as passed", function () {
+            di.dependency('one', 1);
+            di.dependency('two', 2);
+            difunc = di.bind(function (one, $two) {
+                return one + $two;
+            });
+
+            expect(difunc(2)).toBe(4);
+        });
+    });
 });
